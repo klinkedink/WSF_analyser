@@ -142,56 +142,54 @@ export function CompletionsTable({
           rows.
         </p>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[28rem] border-collapse text-left text-xs">
-          <thead>
-            <tr className="bg-amber-300 text-[11px] font-semibold text-slate-900">
-              <th className="px-2 py-1.5">C#</th>
-              <th className="px-2 py-1.5">Installed</th>
-              <th className="px-2 py-1.5 text-right">EOT mKB</th>
-              <th className="px-2 py-1.5 text-right">Days</th>
-              <th className="bg-emerald-200 px-2 py-1.5 text-right">
-                Gas TJ
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {COMPLETIONS.map((c, i) => {
-              const on = highlighted === c.number;
-              return (
-                <tr
-                  key={c.number}
-                  className={`${i % 2 === 1 ? "bg-slate-50" : "bg-white"} cursor-pointer ${on ? "ring-2 ring-inset ring-slate-800" : "hover:bg-slate-100"}`}
-                  onMouseEnter={() => onHighlight(c.number)}
-                  onMouseLeave={() => onHighlight(null)}
-                >
-                  <td className="px-2 py-1.5 font-semibold whitespace-nowrap">
-                    <span
-                      className="mr-1.5 inline-block h-2.5 w-2.5 rounded-sm align-middle"
-                      style={{ backgroundColor: c.color }}
-                      aria-hidden
-                    />
-                    C{c.number}
-                  </td>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-slate-700">
-                    {c.dateInstalled}
-                    <span className="ml-1 text-slate-500">({c.year})</span>
-                  </td>
-                  <td className="px-2 py-1.5 text-right font-mono tabular-nums">
-                    {c.eot_mKB.toFixed(2)}
-                  </td>
-                  <td className="px-2 py-1.5 text-right font-mono tabular-nums">
-                    {c.pumpingDays}
-                  </td>
-                  <td className="bg-emerald-50 px-2 py-1.5 text-right font-mono tabular-nums">
-                    {c.gasProduced_TJ.toFixed(2)}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <table className="w-full table-fixed border-collapse text-left text-xs">
+        <thead>
+          <tr className="bg-amber-300 text-[11px] font-semibold text-slate-900">
+            <th className="w-[18%] px-1.5 py-1.5">C#</th>
+            <th className="w-[16%] px-1.5 py-1.5">Year</th>
+            <th className="w-[24%] px-1.5 py-1.5 text-right">EOT mKB</th>
+            <th className="w-[16%] px-1.5 py-1.5 text-right">Days</th>
+            <th className="w-[26%] bg-emerald-200 px-1.5 py-1.5 text-right">
+              Gas TJ
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {COMPLETIONS.map((c, i) => {
+            const on = highlighted === c.number;
+            return (
+              <tr
+                key={c.number}
+                title={c.dateInstalled}
+                className={`${i % 2 === 1 ? "bg-slate-50" : "bg-white"} cursor-pointer ${on ? "ring-2 ring-inset ring-slate-800" : "hover:bg-slate-100"}`}
+                onMouseEnter={() => onHighlight(c.number)}
+                onMouseLeave={() => onHighlight(null)}
+              >
+                <td className="px-1.5 py-1.5 font-semibold whitespace-nowrap">
+                  <span
+                    className="mr-1 inline-block h-2.5 w-2.5 rounded-sm align-middle"
+                    style={{ backgroundColor: c.color }}
+                    aria-hidden
+                  />
+                  C{c.number}
+                </td>
+                <td className="px-1.5 py-1.5 font-mono tabular-nums text-slate-700">
+                  {c.year}
+                </td>
+                <td className="px-1.5 py-1.5 text-right font-mono tabular-nums">
+                  {c.eot_mKB.toFixed(2)}
+                </td>
+                <td className="px-1.5 py-1.5 text-right font-mono tabular-nums">
+                  {c.pumpingDays}
+                </td>
+                <td className="bg-emerald-50 px-1.5 py-1.5 text-right font-mono tabular-nums">
+                  {c.gasProduced_TJ.toFixed(2)}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -200,12 +198,16 @@ export function WsfAnalyser() {
   const [highlighted, setHighlighted] = useState<number | null>(null);
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-      <LogOverlay highlighted={highlighted} onHighlight={setHighlighted} />
-      <CompletionsTable
-        highlighted={highlighted}
-        onHighlight={setHighlighted}
-      />
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+      <div className="w-full max-w-[835px] shrink-0">
+        <LogOverlay highlighted={highlighted} onHighlight={setHighlighted} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <CompletionsTable
+          highlighted={highlighted}
+          onHighlight={setHighlighted}
+        />
+      </div>
     </div>
   );
 }
